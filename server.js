@@ -86,6 +86,24 @@ app.get('/survey/new', (request, respond) => {
 
 })
 
+app.get('/survey/list', (request, respond) => {
+
+    respond.render('pages/surveyList')
+
+})
+
+app.get('/survey/show', (request, respond) => {
+
+    respond.render('pages/surveyShow')
+
+})
+
+app.get('/survey/done', (request, respond) => {
+
+    respond.render('pages/surveyDone')
+
+})
+
 app.get('/survey/stats', (request, respond) => {
 
     respond.render('pages/stats')
