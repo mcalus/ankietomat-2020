@@ -14,7 +14,7 @@ passport.serializeUser(function(user, next) {
 });
 passport.deserializeUser(function(user, next) {
     // Use the previously serialized user
-        next(null, user);
+    next(null, user);
 });
 // Configuring express-session middleware
 app.use(session({
@@ -33,7 +33,8 @@ app.use(express.static(__dirname + '/public'));
 
 app.listen(3000, () => {
  
-    console.log('Server started and is listening on port 3000')
+    if(typeof(process.argv[2]) === 'undefined' || process.argv[2] !== 'silent')
+        console.log('Server started and is listening on port 3000')
 
     app.locals.logged = false
     app.locals.siteUrl = ""
