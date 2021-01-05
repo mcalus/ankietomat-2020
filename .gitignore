@@ -28,5 +28,4 @@ package-lock.json
 /node_modules/*
 
 a.txt
-db.js
 config.json
