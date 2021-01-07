@@ -3,6 +3,25 @@
 <main>
     <div class="jumbotron">
         <h1>Rejestracja</h1>
+
+        <div>
+        <% if(typeof errors !== 'undefined') { %>
+            <% for(var i=0; i < errors.length; i++) { %>
+                <%= errors[i].msg %><br />
+            <% } 
+        } %>
+        </div>
+        <br />
+
+        <form action="<%=siteUrl%>/register" method="post">
+            <label for="username">Nazwa użytkownika: </label>
+            <input id="username" type="text" name="username" value="<%=typeof user!='undefined'?user.username:''%>">
+
+            <label for="password">Hasło: </label>
+            <input id="password" type="password" name="password">
+
+            <input type="submit" value="OK">
+        </form>
     </div>
 </main>
 

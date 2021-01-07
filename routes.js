@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const passport = require('passport');
 
 var controller = require('./controllers/controllers');
 
@@ -7,7 +8,7 @@ router.get('/', (request, respond) => {
 
     //respond.send('Homepage')
 
-    respond.render('pages/index')
+    respond.render('pages/index', {isLogged: request.isAuthenticated()})
 
 })
 
@@ -17,79 +18,74 @@ router.get('/register', (request, respond) => {
 
 })
 
+router.post('/register', controller.register_do)
+
 router.get('/login', (request, respond, next) => {
-
-    if (!request.body.username || !request.body.password) {
-        return respond.status(400).json({
-            message: 'Please fill out all fields'
-        });
-    }
     
-    // passport.authenticate('local', function(err, user, info) {
-    //     if (err) {
-    //         console.log("ERROR : " + err);
-    //         return next(err);
-    //     }
-
-    //     if(user) (
-    //         console.log("User Exists!")
-    //         //All the data of the user can be accessed by user.x
-    //         respond.json({"success" : true});
-    //         return;
-    //     } else {
-    //         respond.json({"success" : false});
-    //         console.log("Error" + errorResponse());
-    //         return;
-    //     }
-    // })(request, respond, next);
-
-    respond.render('pages/login')
+    respond.render('pages/login', {isLogged: request.isAuthenticated()})
 
 })
+
+router.post('/login', passport.authenticate('local-login', {
+    successRedirect : '/profile', // redirect to the secure profile section
+    failureRedirect : '/login', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
+}));
+
 
 router.get('/logout', (request, respond) => {
 
-    app.locals.logged = false
+    request.logout()
 
-    respond.render('pages/index')
-
-})
-
-router.get('/profile', (request, respond) => {
-
-    respond.render('pages/profile')
+    respond.redirect('/')
 
 })
 
-router.get('/survey/new', (request, respond) => {
+router.get('/profile', isLoggedIn, (request, respond) => {
 
-    respond.render('pages/surveyNew')
-
-})
-
-router.get('/survey/list', (request, respond) => {
-
-    respond.render('pages/surveyList')
+    respond.render('pages/profile', {isLogged: request.isAuthenticated()})
 
 })
 
-router.get('/survey/show/:surveyId', (request, respond) => {
+router.get('/survey/new', isLoggedIn, (request, respond) => {
 
-    respond.render('pages/surveyShow')
-
-})
-
-router.get('/survey/done', (request, respond) => {
-
-    respond.render('pages/surveyDone')
+    respond.render('pages/surveyNew', {isLogged: request.isAuthenticated()})
 
 })
 
-router.get('/survey/stats/:surveyId', (request, respond) => {
+router.get('/survey/list', isLoggedIn, (request, respond) => {
 
-    respond.render('pages/stats')
+    respond.render('pages/surveyList', {isLogged: request.isAuthenticated()})
+
+})
+
+router.get('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
+
+    respond.render('pages/surveyShow', {isLogged: request.isAuthenticated()})
+
+})
+
+router.get('/survey/done', isLoggedIn, (request, respond) => {
+
+    respond.render('pages/surveyDone', {isLogged: request.isAuthenticated()})
+
+})
+
+router.get('/survey/stats/:surveyId', isLoggedIn, (request, respond) => {
+
+    respond.render('pages/stats', {isLogged: request.isAuthenticated()})
 
 })
 
 
 module.exports = router;
+
+
+
+function isLoggedIn(req, res, next){
+	if(req.isAuthenticated())
+		return next();
+
+	res.redirect('/login');
+}
+
