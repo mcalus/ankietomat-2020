@@ -49,72 +49,9 @@ app.listen(3000, () => {
     // });
 })
 
-
-app.get('/', (request, respond) => {
-
-    //respond.send('Homepage')
-
-    respond.render('pages/index')
-
-})
-
-app.get('/register', (request, respond) => {
-
-    respond.render('pages/register')
-
-})
-
-app.get('/login', (request, respond) => {
-
-    app.locals.logged = true
-
-    respond.render('pages/login')
-
-})
-
-app.get('/logout', (request, respond) => {
-
-    app.locals.logged = false
-
-    respond.render('pages/index')
-
-})
-
-app.get('/profile', (request, respond) => {
-
-    respond.render('pages/profile')
-
-})
-
-app.get('/survey/new', (request, respond) => {
-
-    respond.render('pages/surveyNew')
-
-})
-
-app.get('/survey/list', (request, respond) => {
-
-    respond.render('pages/surveyList')
-
-})
-
-app.get('/survey/show', (request, respond) => {
-
-    respond.render('pages/surveyShow')
-
-})
-
-app.get('/survey/done', (request, respond) => {
-
-    respond.render('pages/surveyDone')
-
-})
-
-app.get('/survey/stats', (request, respond) => {
-
-    respond.render('pages/stats')
-
-})
+var router = require('./routes.js');
+app.use('/', router);
 
 
-require('./db.js')(app);
+
+require('./controllers/db.js')(app);

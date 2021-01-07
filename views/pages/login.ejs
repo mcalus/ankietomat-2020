@@ -3,6 +3,16 @@
 <main>
     <div class="jumbotron">
         <h1>Logowanie</h1>
+
+        <form action="<%=siteUrl%>/login" method="post">
+            <label for="username">Enter login: </label>
+            <input id="username" type="text" name="username">
+
+            <label for="password">Enter password: </label>
+            <input id="password" type="password" name="password">
+
+            <input type="submit" value="OK">
+        </form>
     </div>
 </main>
 
