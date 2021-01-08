@@ -27,13 +27,16 @@ exports.register_do = [
         var errors = validationResult(request)
 
         if (!errors.isEmpty()) {
-            respond.render('pages/register', { user: request.body, errors: errors.array() });
+            respond.render('pages/register', { isLogged: request.isAuthenticated(), user: request.body, errors: errors.array() });
             return;
         }
         else {
             var user = new User(
                 {
-                    username: request.body.username
+                    username: request.body.username,
+                    email: request.body.email,
+                    first_name: request.body.first_name,
+                    family_name: request.body.family_name,
                 });
             user.password = user.generateHash(request.body.password)
             user.save(function (err) {

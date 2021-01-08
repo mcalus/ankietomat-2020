@@ -24,14 +24,14 @@
 
               <li><a href="/">Strona Główna</a></li>
 
-              <%if (isLogged) { %>
-              <li><a href="<%=siteUrl%>/survey/new">Stwórz Ankietę</a></li>
-              <li><a href="<%=siteUrl%>/survey/stats">Statystyki</a></li>
-              <li><a href="<%=siteUrl%>/profile">Profil</a></li>
-              <li><a href="<%=siteUrl%>/logout">Wyloguj</a></li>
+              <%if (isLogged == false) { %>
+                <li><a href="<%=siteUrl%>/login">Logowanie</a></li>
+                <li><a href="<%=siteUrl%>/register">Rejestracja</a></li>
               <% } else { %>
-              <li><a href="<%=siteUrl%>/login">Logowanie</a></li>
-              <li><a href="<%=siteUrl%>/register">Rejestracja</a></li>
+                <li><a href="<%=siteUrl%>/survey/new">Stwórz Ankietę</a></li>
+                <li><a href="<%=siteUrl%>/survey/stats">Statystyki</a></li>
+                <li><a href="<%=siteUrl%>/profile">Profil</a></li>
+                <li><a href="<%=siteUrl%>/logout">Wyloguj</a></li>
               <% } %>
           </ul>
       </div>

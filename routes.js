@@ -22,13 +22,15 @@ router.post('/register', controller.register_do)
 
 router.get('/login', (request, respond, next) => {
     
-    respond.render('pages/login', {isLogged: request.isAuthenticated()})
+    respond.render('pages/login', {isLogged: request.isAuthenticated(), errors: request.flash('error')})
 
 })
 
 router.post('/login', passport.authenticate('local-login', {
     successRedirect : '/profile', // redirect to the secure profile section
     failureRedirect : '/login', // redirect back to the signup page if there is an error
+    badRequestMessage : 'Brakuje danych!',
+    successFlash: 'Zalogowano', 
     failureFlash : true // allow flash messages
 }));
 
@@ -37,11 +39,17 @@ router.get('/logout', (request, respond) => {
 
     request.logout()
 
+    request.flash('flashMessage', 'Wylogowano')
+
     respond.redirect('/')
 
 })
 
 router.get('/profile', isLoggedIn, (request, respond) => {
+
+    var flash = request.flash('success')
+    if(Object.keys(flash).length !== 0)
+        request.flash('flashMessage', flash)
 
     respond.render('pages/profile', {isLogged: request.isAuthenticated()})
 
@@ -72,6 +80,12 @@ router.get('/survey/done', isLoggedIn, (request, respond) => {
 })
 
 router.get('/survey/stats/:surveyId', isLoggedIn, (request, respond) => {
+
+    respond.render('pages/stats', {isLogged: request.isAuthenticated()})
+
+})
+
+router.get('/survey/stats', isLoggedIn, (request, respond) => {
 
     respond.render('pages/stats', {isLogged: request.isAuthenticated()})
 

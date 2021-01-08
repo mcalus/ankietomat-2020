@@ -23,12 +23,12 @@ module.exports = function(passport){
             if (err)
                 return done(err);
             if (!user)
-                return done(null, false, { flashMessage: 'No user found.' });
+                return done(null, false, { message: 'Brak takiego użytkownika' });
 
             if (!user.validPassword(password))
-                return done(null, false, { flashMessage: 'Oops! Wrong password.' });
+                return done(null, false, { message: 'Oops! Złe hasło' });
 
-            return done(null, user);
+            return done(null, user, { message: 'Zalogowano' });
         });
     }));
 

@@ -4,8 +4,8 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const flash = require('express-flash-messages')
-// var flash = require('connect-flash')
+// const flash = require('expresss-flash-messages')
+var flash = require('connect-flash')
 
 const app = express()
 
@@ -32,6 +32,19 @@ app.use(express.static(__dirname + '/public'));
 
 app.use(flash())
 
+app.use(function(req, res, next) {
+    res.locals.getMessages = _getMessages(req)
+    next()
+});
+
+function _getMessages(req){
+	return () => {
+		if(req.session === undefined) throw Error('getMessages() requires sessions')
+		const msgs = req.session.flash = req.session.flash || {}
+		req.session.flash = {}
+		return msgs
+	}
+}
 
 app.listen(3000, () => {
  
@@ -46,10 +59,6 @@ app.listen(3000, () => {
     mongoose.connect(app.locals.config.db.url, { useNewUrlParser: true , useUnifiedTopology: true});
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-    app.locals.isLogged = function(req, res) {
-        return req.isAuthenticated()
-    }
 })
 
 

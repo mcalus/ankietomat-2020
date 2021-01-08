@@ -4,6 +4,9 @@
     <div class="jumbotron">
         <h1>Logowanie</h1>
 
+        <div><%=errors%></div>
+        <br />
+
         <form action="<%=siteUrl%>/login" method="post">
             <label for="username">Użytkownik: </label>
             <input id="username" type="text" name="username">

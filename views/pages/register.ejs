@@ -19,6 +19,15 @@
 
             <label for="password">Hasło: </label>
             <input id="password" type="password" name="password">
+            
+            <label for="email">E-mail: </label>
+            <input id="email" type="text" name="email" value="<%=typeof user!='undefined'?user.email:''%>">
+
+            <label for="first_name">Imię: </label>
+            <input id="first_name" type="text" name="first_name" value="<%=typeof user!='undefined'?user.first_name:''%>">
+
+            <label for="family_name">Nazwisko: </label>
+            <input id="family_name" type="text" name="family_name" value="<%=typeof user!='undefined'?user.family_name:''%>">
 
             <input type="submit" value="OK">
         </form>
