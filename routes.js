@@ -94,16 +94,32 @@ router.get('/survey', isLoggedIn, (request, respond) => {
 
 router.get('/survey/new', isLoggedIn, (request, respond) => {
 
-    respond.render('pages/surveyNew', {isLogged: request.isAuthenticated()})
+    respond.render('pages/surveyNew', {isLogged: request.isAuthenticated(), errors: null})
 
+})
+
+router.post('/survey/new', isLoggedIn, (request, respond) => {
+
+    var survey = new Survey(
+        {
+            author: request.user.id,
+            title: request.body.title,
+            descryption: request.body.descryption,
+        });
+    
+    survey.save(function (err) {
+        if (err) throw err
+
+        request.flash('flashMessage', 'Ankieta utworzona')
+        respond.redirect('pages/surveyList')
+    })
 })
 
 router.get('/survey/list', isLoggedIn, (request, respond) => {
 
-    // Survey.findById('5ffae4d60225760e3ed0da87', function(err, result) {
-    Survey.find({}, function(err, result) {
+    Survey.find({author: request.user.id}, function(err, result) {
         if (err) throw err
-        
+
         respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: result})
     })
 })

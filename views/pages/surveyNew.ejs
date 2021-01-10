@@ -3,6 +3,19 @@
 <main>
     <div class="jumbotron">
         <h1>Nowa ankieta</h1>
+
+        <div><%=errors%></div>
+        <br />
+
+        <form action="<%=siteUrl%>/survey/new" method="post">
+            <label for="title">Tytuł: </label>
+            <input id="title" type="text" name="title">
+
+            <label for="descryption">Opis: </label>
+            <textarea name="descryption"></textarea>
+
+            <input type="submit" value="OK">
+        </form>
     </div>
 </main>
 

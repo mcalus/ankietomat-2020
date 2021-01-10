@@ -2,7 +2,10 @@
 
 <main>
     <div class="jumbotron">
-        <h1>Nowa ankieta</h1>
+        <h1>Lista ankiet</h1>
+
+        <a href="<%=siteUrl%>/survey/new">- Stwórz ankietę</a>
+        <br /><br />
 
         <% for(var i=0; i<surveys.length; i++) {%>
             <%= surveys[i].title%>
