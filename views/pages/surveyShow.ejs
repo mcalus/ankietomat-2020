@@ -2,7 +2,19 @@
 
 <main>
     <div class="jumbotron">
-        <h1>Nowa ankieta</h1>
+        <h1>Ankieta "<%=survey.title%>"</h1>
+
+        <p><%=survey.descryption%></p>
+
+        <form action="<%=siteUrl%>/survey/show/<%=survey.id%>" method="post">
+        <% for(var i=0; i<questions.length; i++) {%>
+            <label for="question_<%=questions[i]._id%>"><%=questions[i].question%><%=questions[i].required?'*':''%></label>
+            <input id="question_<%=questions[i]._id%>" type="text" name="question_<%=questions[i]._id%>" value="<%=questions[i].default_response%>">
+            <br />
+        <% } %>
+
+            <input type="submit" value="OK">
+        </form>
     </div>
 </main>
 

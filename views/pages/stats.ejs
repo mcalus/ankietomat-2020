@@ -3,6 +3,13 @@
 <main>
     <div class="jumbotron">
         <h1>Statystyki</h1>
+
+        <% for(var i=0; i<surveys.length; i++) {%>
+            Ankieta "<%=surveys[i].title%>" 
+            <ul>
+                <li>Odpowiedzi: <%=surveys[i].responses.length%></li>
+            </ul>
+         <% } %>
     </div>
 </main>
 
