@@ -28,5 +28,4 @@ UserSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-//Export model
 module.exports = mongoose.model('User', UserSchema);

@@ -11,5 +11,4 @@ var SurveySchema = new Schema(
   }
 );
 
-//Export model
 module.exports = mongoose.model('Survey', SurveySchema);

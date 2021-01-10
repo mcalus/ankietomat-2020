@@ -28,11 +28,11 @@ router.get('/login', (request, respond, next) => {
 })
 
 router.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/profile', // redirect to the secure profile section
-    failureRedirect : '/login', // redirect back to the signup page if there is an error
+    successRedirect : '/profile', 
+    failureRedirect : '/login', 
     badRequestMessage : 'Brakuje danych!',
     successFlash: 'Zalogowano', 
-    failureFlash : true // allow flash messages
+    failureFlash : true 
 }));
 
 
@@ -83,21 +83,6 @@ router.post('/profile', isLoggedIn, (request, respond) => {
             });
         }
     })
-
-
-    // var user = new User(
-    //     {
-    //         email: request.body.email,
-    //         first_name: request.body.first_name,
-    //         family_name: request.body.family_name,
-    //     });
-    // user.password = user.generateHash(request.body.password)
-    // user.save(function (err) {
-    //     if (err) return next(err)
-
-    //     request.flash('flashMessage', 'Dane zmodyfikowane')
-    //     respond.render('pages/profile', {isLogged: request.isAuthenticated(), user: request.user})
-    // })
 })
 
 router.get('/survey/new', isLoggedIn, (request, respond) => {

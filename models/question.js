@@ -12,5 +12,4 @@ var QuestionSchema = new Schema(
   }
 );
 
-//Export model
 module.exports = mongoose.model('Question', QuestionSchema);

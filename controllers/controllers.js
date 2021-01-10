@@ -20,10 +20,8 @@ exports.register_do = [
     body('password').trim().isLength({ min: 1 }).escape().withMessage('Proszę podać hasło')
         .isAlphanumeric().withMessage('Hasło nie zawiera znaków alfanumerycznych'),
 
-    // Process request after validation and sanitization.
     (request, respond, next) => {
         
-        // Extract the validation errors from a request.
         var errors = validationResult(request)
 
         if (!errors.isEmpty()) {

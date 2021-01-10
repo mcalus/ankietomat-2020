@@ -10,5 +10,4 @@ var RespondSchema = new Schema(
   }
 );
 
-//Export model
 module.exports = mongoose.model('Respond', RespondSchema);

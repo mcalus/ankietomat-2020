@@ -11,18 +11,16 @@ const app = express()
 
 require('./controllers/passport')(passport);
 
-// Required to read cookies
 app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// Configuring express-session middleware
 app.use(session({
     secret: 'The cake is a lie',
     resave: true,
     saveUninitialized: true
 }));
-// Initializing passport
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -55,7 +53,6 @@ app.listen(3000, () => {
     app.locals.logged = false
     app.locals.siteUrl = app.locals.config.site.url
     
-    //Set up mongoose connection
     mongoose.connect(app.locals.config.db.url, { useNewUrlParser: true , useUnifiedTopology: true});
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
