@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const passport = require('passport');
+var reversePopulate = require('mongoose-reverse-populate-v2')
 
 var controller = require('./controllers/controllers');
 var User = require('./models/user');
@@ -119,22 +120,27 @@ router.post('/survey/new', isLoggedIn, (request, respond) => {
 
 router.get('/survey/list', isLoggedIn, (request, respond) => {
 
-    Survey.find({author: request.user.id}, function(err, result) {
+    Survey.find({author: request.user.id}).exec(function(err, result) {
         if (err) throw err
 
-        // result.forEach(value,key => {
-            
-        // });
-
-        respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: result})
+        reversePopulate({
+            modelArray: result,
+            storeWhere: "questions",
+            arrayPop: true,
+            mongooseModel: Question,
+            idField: "survey"
+        }, 
+        function(err, popResults) {
+            respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: popResults})
+        })
     })
 })
 
 router.get('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
-    console.log(request.params.surveyId)
+    
     Survey.findOne({_id: request.params.surveyId}, function(err, result) {
         if (err) throw err
-        console.log(result)
+        
         if(result == null) {
             request.flash('flashMessage', 'Brak takiej ankiety!')
             respond.redirect('/survey/list')
@@ -142,8 +148,28 @@ router.get('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
 
         Types.find({}, function(err, result2) {
             if (err) throw err
-            console.log(result2)
-            respond.render('pages/surveyQuestions', {isLogged: request.isAuthenticated(), errors: null, survey: result, types: result2})
+
+            respond.render('pages/surveyQuestions', {isLogged: request.isAuthenticated(), errors: null, survey: result, types: result2, question: null})
+        })
+    })
+})
+
+router.get('/survey/question/:questionId', isLoggedIn, (request, respond) => {
+    
+    Question.findOne({_id: request.params.questionId}, function(err, result0) {
+        Survey.findOne({_id: result0.survey}, function(err, result) {
+            if (err) throw err
+            
+            if(result == null) {
+                request.flash('flashMessage', 'Brak takiej ankiety!')
+                respond.redirect('/survey/list')
+            }
+
+            Types.find({}, function(err, result2) {
+                if (err) throw err
+
+                respond.render('pages/surveyQuestions', {isLogged: request.isAuthenticated(), errors: null, survey: result, types: result2, question: result0})
+            })
         })
     })
 })

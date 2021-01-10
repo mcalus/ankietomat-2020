@@ -8,8 +8,15 @@
         <br /><br />
 
         <% for(var i=0; i<surveys.length; i++) {%>
-            <%=surveys[i].title%> - <a href="<%=siteUrl%>/survey/questions/<%=surveys[i].id%>">Pytania</a>
+            Ankieta: <%=surveys[i].title%> - <a href="<%=siteUrl%>/survey/questions/<%=surveys[i].id%>">Dodaj pytanie</a>
             <br />
+            <ul>
+            <% for(var j=0; j<surveys[i].questions.length; j++) {%>
+                <li>
+                    <a href="<%=siteUrl%>/survey/question/<%=surveys[i].questions[j].id%>">Pytanie: <%=surveys[i].questions[j].question%></a> 
+                </li>
+            <% } %>
+            </ul>
          <% } %>
     </div>
 </main>

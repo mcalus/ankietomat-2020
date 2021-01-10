@@ -2,7 +2,13 @@
 
 <main>
     <div class="jumbotron">
-        <h1>Nowe pytanie do "<%=survey.title%>"</h1>
+        <h1>
+            <%if (question != null) { %>
+                Edytuj pytanie "<%=question.question%>"
+            <% } else { %>
+                Nowe pytanie do "<%=survey.title%>"
+            <% } %>
+        </h1>
 
         <div><%=errors%></div>
         <br />
@@ -11,18 +17,18 @@
             <label for="type">Typ pytania: </label>
             <select name="type" id="type">
                 <% for(var i=0; i<types.length; i++) {%>
-                    <option value="<%=types[i].id%>"><%=types[i].name%></option>
+                    <option value="<%=types[i].id%>" <%if (question != null && question.type == types[i].id) {%> selected="selected" <%}%>><%=types[i].name%></option>
                  <% } %>
             </select>
 
             <label for="question">Pytanie: </label>
-            <input id="question" type="text" name="question">
+            <input id="question" type="text" name="question" value="<%=question!=null?question.question:''%>">
 
             <label for="required">Obowiązkowe? </label>
-            <input id="required" type="checkbox" name="required" value="true">
+            <input id="required" type="checkbox" name="required" value="true" <%if (question != null && question.required == true) {%> checked="checked" <%}%>>
 
             <label for="default_answer">Domyślna odpowiedź: </label>
-            <input id="default_answer" type="text" name="default_answer">
+            <input id="default_answer" type="text" name="default_answer"" value="<%=question!=null?question.default_answer:''%>">
 
             <input type="submit" value="OK">
         </form>

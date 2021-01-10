@@ -16,11 +16,13 @@ body {
     height: 150px;
     width: 350px;
 }
+
 #title {
     width: 30%;
     text-align: center;
 }
-li {
+
+.navigation li {
     float: left;
     width: 150px;
     font-size: large;
@@ -35,7 +37,8 @@ li {
     text-align: center;
     margin: 10px 10px 10px 10px;
 }
-ul {
+
+.navigation ul {
     float: right;
     width: 60%;
     position: absolute;
@@ -45,7 +48,8 @@ ul {
    
 
 }
-a {
+
+.navigation a {
     text-decoration: none;
     color: black;
 }
