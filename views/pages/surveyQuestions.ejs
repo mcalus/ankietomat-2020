@@ -1,0 +1,32 @@
+<%- include('../templates/header'); %>
+
+<main>
+    <div class="jumbotron">
+        <h1>Nowe pytanie do "<%=survey.title%>"</h1>
+
+        <div><%=errors%></div>
+        <br />
+
+        <form action="<%=siteUrl%>/survey/questions/<%=survey.id%>" method="post">
+            <label for="type">Typ pytania: </label>
+            <select name="type" id="type">
+                <% for(var i=0; i<types.length; i++) {%>
+                    <option value="<%=types[i].id%>"><%=types[i].name%></option>
+                 <% } %>
+            </select>
+
+            <label for="question">Pytanie: </label>
+            <input id="question" type="text" name="question">
+
+            <label for="required">Obowiązkowe? </label>
+            <input id="required" type="checkbox" name="required" value="true">
+
+            <label for="default_answer">Domyślna odpowiedź: </label>
+            <input id="default_answer" type="text" name="default_answer">
+
+            <input type="submit" value="OK">
+        </form>
+    </div>
+</main>
+
+<%- include('../templates/footer'); %>

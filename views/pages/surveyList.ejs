@@ -8,7 +8,7 @@
         <br /><br />
 
         <% for(var i=0; i<surveys.length; i++) {%>
-            <%= surveys[i].title%>
+            <%=surveys[i].title%> - <a href="<%=siteUrl%>/survey/questions/<%=surveys[i].id%>">Pytania</a>
             <br />
          <% } %>
     </div>

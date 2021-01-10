@@ -5,6 +5,8 @@ const passport = require('passport');
 var controller = require('./controllers/controllers');
 var User = require('./models/user');
 var Survey = require('./models/survey');
+var Question = require('./models/question');
+var Types = require('./models/types');
 
 router.get('/', (request, respond) => {
 
@@ -111,7 +113,7 @@ router.post('/survey/new', isLoggedIn, (request, respond) => {
         if (err) throw err
 
         request.flash('flashMessage', 'Ankieta utworzona')
-        respond.redirect('pages/surveyList')
+        respond.redirect('/survey/list')
     })
 })
 
@@ -120,8 +122,50 @@ router.get('/survey/list', isLoggedIn, (request, respond) => {
     Survey.find({author: request.user.id}, function(err, result) {
         if (err) throw err
 
+        // result.forEach(value,key => {
+            
+        // });
+
         respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: result})
     })
+})
+
+router.get('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
+    console.log(request.params.surveyId)
+    Survey.findOne({_id: request.params.surveyId}, function(err, result) {
+        if (err) throw err
+        console.log(result)
+        if(result == null) {
+            request.flash('flashMessage', 'Brak takiej ankiety!')
+            respond.redirect('/survey/list')
+        }
+
+        Types.find({}, function(err, result2) {
+            if (err) throw err
+            console.log(result2)
+            respond.render('pages/surveyQuestions', {isLogged: request.isAuthenticated(), errors: null, survey: result, types: result2})
+        })
+    })
+})
+
+router.post('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
+
+    var question = new Question(
+        {
+            survey: request.params.surveyId,
+            type: request.body.type,
+            question: request.body.question,
+            required: request.body.required,
+            default_answer: request.body.default_answer,
+        });
+    
+    question.save(function (err) {
+        if (err) throw err
+
+        request.flash('flashMessage', 'Pytanie zapisane')
+        respond.redirect('/survey/questions/' + request.params.surveyId)
+    })
+
 })
 
 router.get('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
