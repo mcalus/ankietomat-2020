@@ -10,4 +10,4 @@ var RespondSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model('Respond', RespondSchema);
+module.exports = mongoose.model('Respond', RespondSchema, 'respond');

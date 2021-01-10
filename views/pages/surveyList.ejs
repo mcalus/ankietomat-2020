@@ -3,6 +3,11 @@
 <main>
     <div class="jumbotron">
         <h1>Nowa ankieta</h1>
+
+        <% for(var i=0; i<surveys.length; i++) {%>
+            <%= surveys[i].title%>
+            <br />
+         <% } %>
     </div>
 </main>
 

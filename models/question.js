@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var QuestionSchema = new Schema(
   {
     survey: {type: Schema.Types.ObjectId, ref: 'Survey', required: true},
+    type: {type: Schema.Types.ObjectId, ref: 'Types', required: true},
     question: {type: String},
     required: {type: Boolean, default: false},
     default_answer: {type: String},
@@ -12,4 +13,4 @@ var QuestionSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model('Question', QuestionSchema);
+module.exports = mongoose.model('Question', QuestionSchema, 'question');

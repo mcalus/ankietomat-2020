@@ -4,6 +4,7 @@ const passport = require('passport');
 
 var controller = require('./controllers/controllers');
 var User = require('./models/user');
+var Survey = require('./models/survey');
 
 router.get('/', (request, respond) => {
 
@@ -85,6 +86,12 @@ router.post('/profile', isLoggedIn, (request, respond) => {
     })
 })
 
+router.get('/survey', isLoggedIn, (request, respond) => {
+
+    respond.redirect('/survey/list')
+
+})
+
 router.get('/survey/new', isLoggedIn, (request, respond) => {
 
     respond.render('pages/surveyNew', {isLogged: request.isAuthenticated()})
@@ -93,8 +100,12 @@ router.get('/survey/new', isLoggedIn, (request, respond) => {
 
 router.get('/survey/list', isLoggedIn, (request, respond) => {
 
-    respond.render('pages/surveyList', {isLogged: request.isAuthenticated()})
-
+    // Survey.findById('5ffae4d60225760e3ed0da87', function(err, result) {
+    Survey.find({}, function(err, result) {
+        if (err) throw err
+        
+        respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: result})
+    })
 })
 
 router.get('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
