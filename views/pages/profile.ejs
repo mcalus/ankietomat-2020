@@ -3,6 +3,25 @@
 <main>
     <div class="jumbotron">
         <h1>Profil</h1>
+
+        <form action="<%=siteUrl%>/profile" method="post">
+            <label for="password">Nowe hasło: </label>
+            <input id="password" type="password" name="password">
+
+            <label for="password2">Powtórz hasło: </label>
+            <input id="password2" type="password" name="password2">
+            
+            <label for="email">E-mail: </label>
+            <input id="email" type="text" name="email" value="<%=typeof user!='undefined'?user.email:''%>">
+
+            <label for="first_name">Imię: </label>
+            <input id="first_name" type="text" name="first_name" value="<%=typeof user!='undefined'?user.first_name:''%>">
+
+            <label for="family_name">Nazwisko: </label>
+            <input id="family_name" type="text" name="family_name" value="<%=typeof user!='undefined'?user.family_name:''%>">
+
+            <input type="submit" value="OK">
+        </form>
     </div>
 </main>
 

@@ -3,6 +3,7 @@ var router = express.Router();
 const passport = require('passport');
 
 var controller = require('./controllers/controllers');
+var User = require('./models/user');
 
 router.get('/', (request, respond) => {
 
@@ -51,8 +52,52 @@ router.get('/profile', isLoggedIn, (request, respond) => {
     if(Object.keys(flash).length !== 0)
         request.flash('flashMessage', flash)
 
-    respond.render('pages/profile', {isLogged: request.isAuthenticated()})
+    respond.render('pages/profile', {isLogged: request.isAuthenticated(), user: request.user})
 
+})
+
+router.post('/profile', isLoggedIn, (request, respond) => {
+
+    var modifyPassword = false
+    if(request.body.password) {
+        modifyPassword = request.user.generateHash(request.body.password)
+    }
+
+    User.findById(request.user.id, function(err, user) {
+        if (!user)
+          return next(new Error('Nie można znaleźć użytkownika'));
+        else {
+            if(modifyPassword)
+                user.password = modifyPassword
+            user.email = request.body.email
+            user.first_name = request.body.first_name
+            user.family_name = request.body.family_name
+        
+            user.save(function(err) {
+                if (err)
+                    request.flash('flashMessage', 'Problem z modyfikacją danych')
+                else
+                    request.flash('flashMessage', 'Dane zmodyfikowane')
+
+                    respond.redirect('/profile')
+            });
+        }
+    })
+
+
+    // var user = new User(
+    //     {
+    //         email: request.body.email,
+    //         first_name: request.body.first_name,
+    //         family_name: request.body.family_name,
+    //     });
+    // user.password = user.generateHash(request.body.password)
+    // user.save(function (err) {
+    //     if (err) return next(err)
+
+    //     request.flash('flashMessage', 'Dane zmodyfikowane')
+    //     respond.render('pages/profile', {isLogged: request.isAuthenticated(), user: request.user})
+    // })
 })
 
 router.get('/survey/new', isLoggedIn, (request, respond) => {
