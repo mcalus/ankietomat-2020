@@ -43,7 +43,7 @@
 			
 			<div id="display"></div>
 			<div id="newElementId">Domyślna odpowiedź:
-                <% if(question != null) { %>
+                <% if(typeof question.answers != 'undefined') { %>
                     <% for(var i=0; i<question.answers.length; i++) {%>
                         <% if(question.type == '5ffae2a70225760e3ed0da84') { %>
                             <div><input type='radio' name='newInputRadio[]'> <input type='text' name='questionContent[]' value='<%=question.answers[i]%>' /></div>
