@@ -14,21 +14,49 @@
         <br />
 
         <form action="<%=siteUrl%>/survey/questions/<%=survey.id%>" method="post">
+            <% if(question != null) { %>
+            <input type="hidden" name="id" value="<%=question._id%>" />
+            <% } %>
+
             <label for="type">Typ pytania: </label>
             <select name="type" id="type">
                 <% for(var i=0; i<types.length; i++) {%>
                     <option value="<%=types[i].id%>" <%if (question != null && question.type == types[i].id) {%> selected="selected" <%}%>><%=types[i].name%></option>
-                 <% } %>
+                <% } %>
             </select>
 
             <label for="question">Pytanie: </label>
             <input id="question" type="text" name="question" value="<%=question!=null?question.question:''%>">
+            <input type="button" value="Dodaj pytanie" onclick="dodaj_pytanie()"/>
+            <input type="button" value="Dodaj odpowiedz" onclick="createNewElement()"/>
+            <input type="button" value="Usuń odpowiedź" onclick="deleteAnswer()" >
+            <br />
+            <div id="wynik"></div>
 
             <label for="required">Obowiązkowe? </label>
             <input id="required" type="checkbox" name="required" value="true" <%if (question != null && question.required == true) {%> checked="checked" <%}%>>
 
-            <label for="default_answer">Domyślna odpowiedź: </label>
-            <input id="default_answer" type="text" name="default_answer"" value="<%=question!=null?question.default_answer:''%>">
+            <!-- <label for="default_answer">Domyślna odpowiedź: </label>
+            <input id="default_answer" type="text" name="default_answer"" value="<%=question!=null?question.default_answer:''%>"> -->
+
+            <div id="wynik2"></div>
+			
+			<div id="display"></div>
+			<div id="newElementId">Domyślna odpowiedź:
+                <% if(question != null) { %>
+                    <% for(var i=0; i<question.answers.length; i++) {%>
+                        <% if(question.type == '5ffae2a70225760e3ed0da84') { %>
+                            <div><input type='radio' name='newInputRadio[]'> <input type='text' name='questionContent[]' value='<%=question.answers[i]%>' /></div>
+                        <% }
+                        else if(question.type == '5ffae2cc0225760e3ed0da86') { %>
+                            <div><input type='text' name='questionContent[]' value='<%=question.answers[i]%>' /></div>
+                            <% }
+                        else { %>
+                            <div><input type='checkbox' name='newCheckbox[]'><input type='text' name='questionContent[]' value='<%=question.answers[i]%>' /></div>
+                            <% } %>
+                    <% } %>
+                <% } %>
+            </div>
 
             <input type="submit" value="OK">
         </form>

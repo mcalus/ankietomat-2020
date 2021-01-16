@@ -2,5 +2,11 @@
     <p class="text-center text-muted">© Copyright 2020-2021</p>
 </footer>
 
+<% if(typeof externalJS !== 'undefined') { %>
+    <% for(var i=0; i<externalJS.length; i++) {%>
+        <script type="text/javascript" src="<%=siteUrl%>/js/<%=externalJS[i]%>"></script>
+    <% } %>
+<% } %>
+
 </body>
 </html>

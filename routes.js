@@ -150,7 +150,14 @@ router.get('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
         Types.find({}, function(err, result2) {
             if (err) throw err
 
-            respond.render('pages/surveyQuestions', {isLogged: request.isAuthenticated(), errors: null, survey: result, types: result2, question: null})
+            respond.render('pages/surveyQuestions', {
+                isLogged: request.isAuthenticated(), 
+                errors: null, 
+                survey: result, 
+                types: result2, 
+                question: null,
+                externalJS: ['questions.js']
+            })
         })
     })
 })
@@ -158,6 +165,9 @@ router.get('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
 router.get('/survey/question/:questionId', isLoggedIn, (request, respond) => {
     
     Question.findOne({_id: request.params.questionId}, function(err, result0) {
+        
+        result0.answers = JSON.parse(result0.default_answer)
+
         Survey.findOne({_id: result0.survey}, function(err, result) {
             if (err) throw err
             
@@ -169,22 +179,33 @@ router.get('/survey/question/:questionId', isLoggedIn, (request, respond) => {
             Types.find({}, function(err, result2) {
                 if (err) throw err
 
-                respond.render('pages/surveyQuestions', {isLogged: request.isAuthenticated(), errors: null, survey: result, types: result2, question: result0})
+                respond.render('pages/surveyQuestions', {
+                    isLogged: request.isAuthenticated(), 
+                    errors: null, 
+                    survey: result, 
+                    types: result2, 
+                    question: result0,
+                    externalJS: ['questions.js']
+                })
             })
         })
     })
 })
 
-router.post('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
+router.post('/survey/questions/:surveyId', isLoggedIn, async (request, respond) => {
 
-    var question = new Question(
-        {
-            survey: request.params.surveyId,
-            type: request.body.type,
-            question: request.body.question,
-            required: request.body.required,
-            default_answer: request.body.default_answer,
-        });
+    if(typeof request.body.id != 'undefined') {
+        var question = await Question.findOne({_id: request.body.id})
+    }
+    else {
+        var question = new Question()
+    }
+
+    question.survey = request.params.surveyId
+    question.type = request.body.type
+    question.question = request.body.question
+    question.required = request.body.required
+    question.default_answer = JSON.stringify(request.body.questionContent)
     
     question.save(function (err) {
         if (err) throw err
@@ -192,44 +213,44 @@ router.post('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
         request.flash('flashMessage', 'Pytanie zapisane')
         respond.redirect('/survey/questions/' + request.params.surveyId)
     })
-
 })
 
 router.get('/survey/stats', isLoggedIn, (request, respond) => {
 
     respond.redirect('/survey/list')
+    return true
 
-    // Survey.find({author: request.user.id}, function(err, result) {
-    //     if (err) throw err
+    Survey.find({author: request.user.id}, function(err, result) {
+        if (err) throw err
 
-    //     reversePopulate({
-    //         modelArray: result,
-    //         storeWhere: "questions",
-    //         arrayPop: true,
-    //         mongooseModel: Question,
-    //         idField: "survey"
-    //     }, 
-    //     function(err, popResults) {
-    //         reversePopulate({
-    //             modelArray: popResults,
-    //             storeWhere: "questions",
-    //             arrayPop: true,
-    //             mongooseModel: Question,
-    //             idField: "survey"
-    //         }, 
-    //         function(err, popResults2) {
-    //             respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: popResults})
-    //         })
-    //     })
+        reversePopulate({
+            modelArray: result,
+            storeWhere: "questions",
+            arrayPop: true,
+            mongooseModel: Question,
+            idField: "survey"
+        }, 
+        function(err, popResults) {
+            reversePopulate({
+                modelArray: popResults,
+                storeWhere: "questions",
+                arrayPop: true,
+                mongooseModel: Question,
+                idField: "survey"
+            }, 
+            function(err, popResults2) {
+                respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: popResults})
+            })
+        })
 
-    //     Question.find({survey: result.id}, function(err, result2) {
-    //         Respond.find({}, function(err, result3) {
-    //             if (err) throw err
+        Question.find({survey: result.id}, function(err, result2) {
+            Respond.find({}, function(err, result3) {
+                if (err) throw err
     
-    //             respond.render('pages/stats', {isLogged: request.isAuthenticated(), errors: null, survey: result, types: result2, question: result0})
-    //         })
-    //     })
-    // })
+                respond.render('pages/stats', {isLogged: request.isAuthenticated(), errors: null, survey: result, types: result2, question: result0})
+            })
+        })
+    })
 
 })
 
@@ -253,10 +274,14 @@ router.get('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
 
 router.post('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
 
+    Question.find({survey: request.params.surveyId}, function(err, result2) {
+        if (err) throw err
 
+        
 
-    request.flash('flashMessage', 'Dziękujemy za odpowiedzenie na ankietę')
-    respond.redirect('/survey/list')
+        request.flash('flashMessage', 'Dziękujemy za odpowiedzenie na ankietę')
+        respond.redirect('/survey/list')
+    })
 
 })
 
