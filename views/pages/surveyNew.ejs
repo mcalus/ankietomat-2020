@@ -2,17 +2,27 @@
 
 <main>
     <div class="jumbotron">
-        <h1>Nowa ankieta</h1>
+        <h1>
+            <%if (survey != null) { %>
+                Edytuj ankietę "<%=survey.title%>"
+            <% } else { %>
+                Nowa ankieta
+            <% } %>
+        </h1>
 
         <div><%=errors%></div>
         <br />
 
         <form action="<%=siteUrl%>/survey/new" method="post">
+            <% if(survey != null) { %>
+            <input type="hidden" name="id" value="<%=survey._id%>" />
+            <% } %>
+
             <label for="title">Tytuł: </label>
-            <input id="title" type="text" name="title">
+            <input id="title" type="text" name="title" value="<%=survey!=null?survey.title:''%>">
 
             <label for="descryption">Opis: </label>
-            <textarea name="descryption"></textarea>
+            <textarea name="descryption"><%=survey!=null?survey.descryption:''%></textarea>
 
             <input type="submit" value="OK">
         </form>

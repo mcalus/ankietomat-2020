@@ -98,24 +98,66 @@ router.get('/survey', isLoggedIn, (request, respond) => {
 
 router.get('/survey/new', isLoggedIn, (request, respond) => {
 
-    respond.render('pages/surveyNew', {isLogged: request.isAuthenticated(), errors: null})
+    respond.render('pages/surveyNew', {isLogged: request.isAuthenticated(), errors: null, survey: null})
 
 })
 
-router.post('/survey/new', isLoggedIn, (request, respond) => {
+router.post('/survey/new', isLoggedIn, async (request, respond) => {
 
-    var survey = new Survey(
-        {
-            author: request.user.id,
-            title: request.body.title,
-            descryption: request.body.descryption,
-        });
+    if(typeof request.body.id != 'undefined') {
+        var survey = await Survey.findOne({_id: request.body.id})
+    }
+    else {
+        var survey = new Survey()
+        survey.author = request.user.id
+    }
+
+    survey.title = request.body.title
+    survey.descryption = request.body.descryption
     
     survey.save(function (err) {
         if (err) throw err
 
-        request.flash('flashMessage', 'Ankieta utworzona')
+        request.flash('flashMessage', 'Ankieta zapisana')
         respond.redirect('/survey/list')
+    })
+})
+
+router.get('/survey/edit/:surveyId', isLoggedIn, (request, respond) => {
+
+    Survey.findOne({_id: request.params.surveyId}, function(err, result) {
+        if (err) throw err
+        
+        if(result == null) {
+            request.flash('flashMessage', 'Brak takiej ankiety!')
+            respond.redirect('/survey/list')
+        }
+
+        respond.render('pages/surveyNew', {isLogged: request.isAuthenticated(), errors: null, survey: result})
+    })
+})
+
+router.get('/survey/delete/:surveyId', isLoggedIn, async (request, respond) => {
+
+    Survey.findOne({_id: request.params.surveyId}).exec(async function(err, result) {
+        if (err) return handleError(err)
+        
+        if(result != null && String(result.author) == String(request.user._id)) {
+            
+            await Respond.deleteMany({survey: result._id})
+            await Question.deleteMany({survey: result._id})
+
+            result.deleteOne({}, function (err) {
+                if (err) return handleError(err)
+
+                request.flash('flashMessage', 'Ankieta ' + result.title + ' skasowana')
+                respond.redirect('/survey/list')
+            })
+        }
+        else {
+            request.flash('flashMessage', 'Brak takiej ankiety')
+            respond.redirect('/survey/list')
+        }
     })
 })
 
@@ -166,8 +208,11 @@ router.get('/survey/question/:questionId', isLoggedIn, (request, respond) => {
     
     Question.findOne({_id: request.params.questionId}, function(err, result0) {
         
-        result0.answers = JSON.parse(result0.default_answer)
-
+        if(result0.default_answer)
+            result0.answers = JSON.parse(result0.default_answer)
+        else
+            result0.answers = null
+    
         Survey.findOne({_id: result0.survey}, function(err, result) {
             if (err) throw err
             
@@ -211,7 +256,31 @@ router.post('/survey/questions/:surveyId', isLoggedIn, async (request, respond) 
         if (err) throw err
 
         request.flash('flashMessage', 'Pytanie zapisane')
-        respond.redirect('/survey/questions/' + request.params.surveyId)
+        // respond.redirect('/survey/questions/' + request.params.surveyId)
+        respond.redirect('/survey/list')
+    })
+})
+
+router.get('/survey/question/delete/:questionId', isLoggedIn, (request, respond) => {
+
+    Question.findOne({_id: request.params.questionId}).populate('survey').exec(async function(err, result) {
+        if (err) return handleError(err)
+        
+        if(result != null && String(result.survey.author) == String(request.user._id)) {
+
+            await Respond.deleteMany({survey: result._id})
+
+            result.deleteOne({}, function (err) {
+                if (err) return handleError(err)
+
+                request.flash('flashMessage', 'Pytanie ' + result.question + ' skasowane')
+                respond.redirect('/survey/list')
+            })
+        }
+        else {
+            request.flash('flashMessage', 'Brak takiego pytania')
+            respond.redirect('/survey/list')
+        }
     })
 })
 
