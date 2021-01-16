@@ -284,43 +284,21 @@ router.get('/survey/question/delete/:questionId', isLoggedIn, (request, respond)
     })
 })
 
-router.get('/survey/stats', isLoggedIn, (request, respond) => {
+router.get('/survey/stats', isLoggedIn, async (request, respond) => {
 
-    respond.redirect('/survey/list')
-    return true
+    var surveys = await Survey.find({author: request.user.id})
 
-    Survey.find({author: request.user.id}, function(err, result) {
-        if (err) throw err
+    for(var i=0; i<surveys.length; i++) {
+        surveys[i].questions = await Question.find({survey: surveys[i]._id})
 
-        reversePopulate({
-            modelArray: result,
-            storeWhere: "questions",
-            arrayPop: true,
-            mongooseModel: Question,
-            idField: "survey"
-        }, 
-        function(err, popResults) {
-            reversePopulate({
-                modelArray: popResults,
-                storeWhere: "questions",
-                arrayPop: true,
-                mongooseModel: Question,
-                idField: "survey"
-            }, 
-            function(err, popResults2) {
-                respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: popResults})
-            })
-        })
+        for(var j=0; j<surveys[i].questions.length; j++) {
+            surveys[i].questions[j].responses = await Respond.find({question: surveys[i].questions[j]._id})
+        }
 
-        Question.find({survey: result.id}, function(err, result2) {
-            Respond.find({}, function(err, result3) {
-                if (err) throw err
-    
-                respond.render('pages/stats', {isLogged: request.isAuthenticated(), errors: null, survey: result, types: result2, question: result0})
-            })
-        })
-    })
+        surveys[i].responses = await Respond.find({survey: surveys[i]._id}).distinct("date_of_create")
+    }
 
+    respond.render('pages/stats', {isLogged: request.isAuthenticated(), surveys: surveys})
 })
 
 router.get('/survey/show/:surveyId', isLoggedIn, (request, respond) => {

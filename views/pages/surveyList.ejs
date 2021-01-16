@@ -10,6 +10,8 @@
         <% for(var i=0; i<surveys.length; i++) {%>
             Ankieta "<%=surveys[i].title%>" 
             <br />
+            <%=surveys[i].descryption%>
+            <br />
             - <a href="<%=siteUrl%>/survey/show/<%=surveys[i].id%>">Odpowiedz na ankietę</a>
             <br />
             - <a href="<%=siteUrl%>/survey/edit/<%=surveys[i].id%>">Edytuj ankietę</a>
