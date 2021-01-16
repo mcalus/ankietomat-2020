@@ -207,7 +207,7 @@ router.get('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
 router.get('/survey/question/:questionId', isLoggedIn, (request, respond) => {
     
     Question.findOne({_id: request.params.questionId}, function(err, result0) {
-        
+
         Survey.findOne({_id: result0.survey}, function(err, result) {
             if (err) throw err
             
@@ -314,17 +314,26 @@ router.get('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
     })
 })
 
-router.post('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
+router.post('/survey/show/:surveyId', isLoggedIn, async (request, respond) => {
 
-    Question.find({survey: request.params.surveyId}, function(err, result2) {
-        if (err) throw err
+    var survey = await Survey.findOne({_id: request.params.surveyId})
+    var questions = await Question.find({survey: request.params.surveyId})
+    var datestamp = Date.now()
 
-        
+    for(var i=0; i<questions.length; i++) {
+        if(request.body['question_'+questions[i]._id]) {
+            new Respond({
+                survey: survey._id,
+                question: questions[i]._id,
+                responder: request.user.id,
+                answer: request.body['question_'+questions[i]._id],
+                date_of_create: datestamp,
+            }).save()
+        }
+    }
 
-        request.flash('flashMessage', 'Dziękujemy za odpowiedzenie na ankietę')
-        respond.redirect('/survey/list')
-    })
-
+    request.flash('flashMessage', 'Dziękujemy za odpowiedzenie na ankietę "' + survey.title + '"')
+    respond.redirect('/survey/list')
 })
 
 

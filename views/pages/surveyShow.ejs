@@ -19,7 +19,7 @@
                         value="<%=questions[i].default_answers[j]%>" 
                         <%=questions[i].required?'required':''%>
                     />
-                    <label for="question_<%=questions[i]._id%>_<%=j%>"><%=questions[i].default_answers[j]%><%=questions[i].required?'*':''%></label>
+                    <label for="question_<%=questions[i]._id%>_<%=j%>"><%=questions[i].default_answers[j]%></label>
                 <% } %>
             <% } else if(questions[i].type == '5ffae2cc0225760e3ed0da86') { %>
                 <% for(var j=0; j<questions[i].default_answers.length; j++) {%>
@@ -30,7 +30,7 @@
                         value="<%=questions[i].default_answers[j]%>" 
                         <%=questions[i].required?'required':''%>
                     />
-                    <label for="question_<%=questions[i]._id%>_<%=j%>"><%=questions[i].default_answers[j]%><%=questions[i].required?'*':''%></label>
+                    <label for="question_<%=questions[i]._id%>_<%=j%>"><%=questions[i].default_answers[j]%></label>
                 <% } %>
             <% } else { %>
                 <input 
