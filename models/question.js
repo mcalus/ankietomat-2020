@@ -13,4 +13,10 @@ var QuestionSchema = new Schema(
   }
 );
 
+QuestionSchema
+.virtual('default_answers')
+.get(function () {
+  return JSON.parse(this.default_answer);
+});
+
 module.exports = mongoose.model('Question', QuestionSchema, 'question');

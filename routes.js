@@ -208,11 +208,6 @@ router.get('/survey/question/:questionId', isLoggedIn, (request, respond) => {
     
     Question.findOne({_id: request.params.questionId}, function(err, result0) {
         
-        if(result0.default_answer)
-            result0.answers = JSON.parse(result0.default_answer)
-        else
-            result0.answers = null
-    
         Survey.findOne({_id: result0.survey}, function(err, result) {
             if (err) throw err
             

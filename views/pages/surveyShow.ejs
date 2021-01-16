@@ -9,11 +9,42 @@
         <form action="<%=siteUrl%>/survey/show/<%=survey.id%>" method="post">
         <% for(var i=0; i<questions.length; i++) {%>
             <label for="question_<%=questions[i]._id%>"><%=questions[i].question%><%=questions[i].required?'*':''%></label>
-            <input id="question_<%=questions[i]._id%>" type="text" name="question_<%=questions[i]._id%>" value="<%=questions[i].default_response%>">
+
+            <% if(questions[i].type == '5ffae2a70225760e3ed0da84') { %>
+                <% for(var j=0; j<questions[i].default_answers.length; j++) {%>
+                    <input 
+                        id="question_<%=questions[i]._id%>_<%=j%>" 
+                        type="radio" 
+                        name="question_<%=questions[i]._id%>" 
+                        value="<%=questions[i].default_answers[j]%>" 
+                        <%=questions[i].required?'required':''%>
+                    />
+                    <label for="question_<%=questions[i]._id%>_<%=j%>"><%=questions[i].default_answers[j]%><%=questions[i].required?'*':''%></label>
+                <% } %>
+            <% } else if(questions[i].type == '5ffae2cc0225760e3ed0da86') { %>
+                <% for(var j=0; j<questions[i].default_answers.length; j++) {%>
+                    <input 
+                        id="question_<%=questions[i]._id%>_<%=j%>" 
+                        type="checkbox" 
+                        name="question_<%=questions[i]._id%>" 
+                        value="<%=questions[i].default_answers[j]%>" 
+                        <%=questions[i].required?'required':''%>
+                    />
+                    <label for="question_<%=questions[i]._id%>_<%=j%>"><%=questions[i].default_answers[j]%><%=questions[i].required?'*':''%></label>
+                <% } %>
+            <% } else { %>
+                <input 
+                    id="question_<%=questions[i]._id%>" 
+                    type="text" 
+                    name="question_<%=questions[i]._id%>" 
+                    placeholder="<%=questions[i].default_answers.join(' ')%>" 
+                    <%=questions[i].required?'required':''%>
+                />
+            <% } %>
             <br />
         <% } %>
 
-            <input type="submit" value="OK">
+            <input type="submit" value="Wyślij!">
         </form>
     </div>
 </main>
