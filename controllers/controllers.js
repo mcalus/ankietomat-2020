@@ -1,4 +1,5 @@
-const { body,validationResult } = require('express-validator');
+const { body,validationResult } = require('express-validator')
+var mailer = require('./mailer')
 
 var User = require('../models/user');
 
@@ -39,6 +40,11 @@ exports.register_do = [
             user.password = user.generateHash(request.body.password)
             user.save(function (err) {
                 if (err) return next(err)
+
+                if(request.body.email != '') {
+                    var body = 'Dziękujemy za rejestrację w Ankietomacie. Możesz zalogować się używając swojego loginu: '+ request.body.username
+                    mailer.sendMail(request, request.body.email, 'Ankietomat - rejestracja użytkownika "'+ request.body.username +'"', body)
+                }
 
                 request.flash('flashMessage', 'Użytkownik stworzony')
                 respond.render('pages/register', {isLogged: request.isAuthenticated()})

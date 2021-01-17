@@ -9,7 +9,7 @@
         <% for(var i=0; i<responses.length; i++) {%>
             Odpowiadający: <%=responses[i].answers[0].responder.name%> "<%=responses[i].answers[0].responder.username%>"
             <br />
-            <%=responses[i].date_of_create%>
+            <%=responses[i].answers[0].date_of_create%>
 
             <% for(var j=0; j<responses[i].answers.length; j++) {%>
                 Pytanie: <%=responses[i].answers[j].question.question%>

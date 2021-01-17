@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const passport = require('passport');
 var reversePopulate = require('mongoose-reverse-populate-v2')
+var mailer = require('./controllers/mailer')
 
 var controller = require('./controllers/controllers');
 var User = require('./models/user');
@@ -316,7 +317,7 @@ router.get('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
 
 router.post('/survey/show/:surveyId', isLoggedIn, async (request, respond) => {
 
-    var survey = await Survey.findOne({_id: request.params.surveyId})
+    var survey = await Survey.findOne({_id: request.params.surveyId}).populate('author')
     var questions = await Question.find({survey: request.params.surveyId})
     var datestamp = Date.now()
 
@@ -337,9 +338,19 @@ router.post('/survey/show/:surveyId', isLoggedIn, async (request, respond) => {
         }).save()
     }
 
-    
+    var message = 'Dziękujemy za odpowiedzenie na ankietę "' + survey.title + '"'
 
-    request.flash('flashMessage', 'Dziękujemy za odpowiedzenie na ankietę "' + survey.title + '"')
+    if(survey.author.email) {
+        var body = 'Twoja ankieta "'+ survey.title +'" została właśnie wypełniona przez ' + request.user.name
+        mailer.sendMail(request, survey.author.email, 'Ankietomat - wypełniona ankieta "'+ survey.title +'"', body)
+        // var mail = mailer.sendMail(request, survey.author.email, 'Ankietomat - wypełniona ankieta "'+ survey.title +'"', body)
+        // console.log(mail)
+        // if(mail !== true)
+        //     message += '<br />' + mail
+        // console.log(message)
+    }
+
+    request.flash('flashMessage', message)
     respond.redirect('/survey/list')
 })
 
@@ -355,7 +366,7 @@ router.get('/survey/responses/:surveyId', isLoggedIn, async (request, respond) =
         responses[i].answers = await Respond.find({date_of_create: responses[i]}).populate('question').populate('responder')
 
         for(var j=0; j<responses[i].answers.length; j++) {
-            if(responses[i].answers[j].question.type == '5ffae2cc0225760e3ed0da86' && responses[i].answers[j].answer != '')
+            if(responses[i].answers[j].question.type == '5ffae2cc0225760e3ed0da86' && responses[i].answers[j].answer != '' && responses[i].answers[j].answer[0] == '[')
                 responses[i].answers[j].answers = JSON.parse(responses[i].answers[j].answer)
             else
                 responses[i].answers[j].answers = responses[i].answers[j].answer
@@ -377,10 +388,10 @@ module.exports = router;
 
 
 
+
 function isLoggedIn(req, res, next){
 	if(req.isAuthenticated())
 		return next();
 
 	res.redirect('/login');
 }
-
