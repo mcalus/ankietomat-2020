@@ -321,19 +321,55 @@ router.post('/survey/show/:surveyId', isLoggedIn, async (request, respond) => {
     var datestamp = Date.now()
 
     for(var i=0; i<questions.length; i++) {
+        var answer = '';
         if(request.body['question_'+questions[i]._id]) {
-            new Respond({
-                survey: survey._id,
-                question: questions[i]._id,
-                responder: request.user.id,
-                answer: request.body['question_'+questions[i]._id],
-                date_of_create: datestamp,
-            }).save()
+            var answer = request.body['question_'+questions[i]._id]
+            if(typeof answer !== 'string')
+                answer = JSON.stringify(answer)
         }
+
+        new Respond({
+            survey: survey._id,
+            question: questions[i]._id,
+            responder: request.user.id,
+            answer: answer,
+            date_of_create: datestamp,
+        }).save()
     }
+
+    
 
     request.flash('flashMessage', 'Dziękujemy za odpowiedzenie na ankietę "' + survey.title + '"')
     respond.redirect('/survey/list')
+})
+
+
+router.get('/survey/responses/:surveyId', isLoggedIn, async (request, respond) => {
+
+    var survey = await Survey.findOne({_id: request.params.surveyId})
+    var responses = await Respond.find({survey: survey._id}).distinct('date_of_create')
+    // var questions = await Question.find({survey: survey._id})
+    // var responses_questions = await Respond.find({survey: request.params.surveyId}).populate('responder').populate('question').sort('date_of_create')
+
+    for(var i=0; i<responses.length; i++) {
+        responses[i].answers = await Respond.find({date_of_create: responses[i]}).populate('question').populate('responder')
+
+        for(var j=0; j<responses[i].answers.length; j++) {
+            if(responses[i].answers[j].question.type == '5ffae2cc0225760e3ed0da86' && responses[i].answers[j].answer != '')
+                responses[i].answers[j].answers = JSON.parse(responses[i].answers[j].answer)
+            else
+                responses[i].answers[j].answers = responses[i].answers[j].answer
+        }
+    }
+    
+    respond.render('pages/responses', {
+        isLogged: request.isAuthenticated(), 
+        errors: null, 
+        survey: survey, 
+        responses: responses, 
+        // questions: questions, 
+        // responses_questions: responses_questions
+    })
 })
 
 

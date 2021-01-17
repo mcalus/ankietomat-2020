@@ -16,7 +16,10 @@ var QuestionSchema = new Schema(
 QuestionSchema
 .virtual('default_answers')
 .get(function () {
-  return JSON.parse(this.default_answer);
+  if(this.default_answer == "")
+    return this.default_answer;
+  else
+    return JSON.parse(this.default_answer);
 });
 
 module.exports = mongoose.model('Question', QuestionSchema, 'question');

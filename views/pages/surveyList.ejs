@@ -1,36 +1,40 @@
 <%- include('../templates/header'); %>
 
 <main>
-    <div class="jumbotron">
+    <div class="ankieta jumbotron">
         <h1>Lista ankiet</h1>
 
         <a href="<%=siteUrl%>/survey/new">- Stwórz ankietę</a>
         <br /><br />
 
         <% for(var i=0; i<surveys.length; i++) {%>
-            Ankieta "<%=surveys[i].title%>" 
-            <br />
-            <%=surveys[i].descryption%>
-            <br />
-            - <a href="<%=siteUrl%>/survey/show/<%=surveys[i].id%>">Odpowiedz na ankietę</a>
-            <br />
-            - <a href="<%=siteUrl%>/survey/edit/<%=surveys[i].id%>">Edytuj ankietę</a>
-            <br />
-            - <a href="<%=siteUrl%>/survey/questions/<%=surveys[i].id%>">Dodaj pytanie</a>
-            <br />
-            - <a href="<%=siteUrl%>/survey/delete/<%=surveys[i].id%>" onClick="return confirm('Czy na pewno usunąć ankietę <%=surveys[i].title%>?')">Usuń ankietę</a>
-            <br />
-            <ul>
-            <% if(surveys[i].questions) { %>
-                <% for(var j=0; j<surveys[i].questions.length; j++) {%>
-                    <li>
-                        Pytanie "<%=surveys[i].questions[j].question%>"
-                        <a href="<%=siteUrl%>/survey/question/<%=surveys[i].questions[j].id%>">Edycja</a> 
-                        <a href="<%=siteUrl%>/survey/question/delete/<%=surveys[i].questions[j].id%>" onClick="return confirm('Czy na pewno usunąć pytanie <%=surveys[i].questions[j].question%>?')">Usuń</a> 
-                    </li>
+            <div class="survey">
+                <p class="surveyTitle">Ankieta "<%=surveys[i].title%>"</p>
+                <br />
+                <p class="surveyDesc"><%=surveys[i].descryption%></p>
+                <br />
+                - <a href="<%=siteUrl%>/survey/show/<%=surveys[i].id%>">Odpowiedz na ankietę</a>
+                <br />
+                - <a href="<%=siteUrl%>/survey/responses/<%=surveys[i].id%>">Wyniki</a>
+                <br />
+                - <a href="<%=siteUrl%>/survey/edit/<%=surveys[i].id%>">Edytuj ankietę</a>
+                <br />
+                - <a href="<%=siteUrl%>/survey/questions/<%=surveys[i].id%>">Dodaj pytanie</a>
+                <br />
+                - <a href="<%=siteUrl%>/survey/delete/<%=surveys[i].id%>" onClick="return confirm('Czy na pewno usunąć ankietę <%=surveys[i].title%>?')">Usuń ankietę</a>
+                <br />
+                <ul>
+                <% if(surveys[i].questions) { %>
+                    <% for(var j=0; j<surveys[i].questions.length; j++) {%>
+                        <li>
+                            Pytanie "<%=surveys[i].questions[j].question%>"
+                            <a href="<%=siteUrl%>/survey/question/<%=surveys[i].questions[j].id%>">Edycja</a> 
+                            <a href="<%=siteUrl%>/survey/question/delete/<%=surveys[i].questions[j].id%>" onClick="return confirm('Czy na pewno usunąć pytanie <%=surveys[i].questions[j].question%>?')">Usuń</a> 
+                        </li>
+                    <% } %>
                 <% } %>
-            <% } %>
-            </ul>
+                </ul>
+            </div>
          <% } %>
     </div>
 </main>

@@ -1,0 +1,33 @@
+<%- include('../templates/header'); %>
+
+<main>
+    <div class="jumbotron">
+        <h1>Ankieta "<%=survey.title%>"</h1>
+
+        <p><%=survey.descryption%></p>
+
+        <% for(var i=0; i<responses.length; i++) {%>
+            Odpowiadający: <%=responses[i].answers[0].responder.name%> "<%=responses[i].answers[0].responder.username%>"
+            <br />
+            <%=responses[i].date_of_create%>
+
+            <% for(var j=0; j<responses[i].answers.length; j++) {%>
+                Pytanie: <%=responses[i].answers[j].question.question%>
+                <br />
+                Odpowiedź: 
+                <% if(responses[i].answers[j].question.type == '5ffae2cc0225760e3ed0da86') { %>
+                    <% for(var k=0; k<responses[i].answers[j].answers.length; k++) {%>
+                        <br />
+                        - <%=responses[i].answers[j].answers[k]%>
+                    <% } %>
+                <% } else { %>
+                    <%=responses[i].answers[j].answers%>
+                <% } %>
+                <br />
+            <% } %>
+            <br />
+        <% } %>
+    </div>
+</main>
+
+<%- include('../templates/footer'); %>
