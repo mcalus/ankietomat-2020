@@ -47,7 +47,8 @@ exports.register_do = [
                 }
 
                 request.flash('flashMessage', 'Użytkownik stworzony')
-                respond.render('pages/register', {isLogged: request.isAuthenticated()})
+                // respond.render('pages/register', {isLogged: request.isAuthenticated()})
+                respond.redirect('/login')
             })
         }
     }

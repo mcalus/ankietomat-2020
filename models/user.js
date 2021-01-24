@@ -17,7 +17,10 @@ var UserSchema = new Schema(
 UserSchema
 .virtual('name')
 .get(function () {
-  return this.first_name + ' ' + this.family_name;
+  if(this.first_name !== '' || this.family_name !== '')
+    return this.first_name + ' ' + this.family_name;
+  else
+    return this.username;
 });
 
 UserSchema.methods.generateHash = function(password) {
