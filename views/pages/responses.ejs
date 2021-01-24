@@ -7,9 +7,10 @@
         <p><%=survey.descryption%></p>
 
         <% for(var i=0; i<responses.length; i++) {%>
-            Odpowiadający: <%=responses[i].answers[0].responder.name%> "<%=responses[i].answers[0].responder.username%>"
+            Odpowiadający: <%=responses[i].answers[0].responder.name%> <!--"<%=responses[i].answers[0].responder.username%>"-->
             <br />
             <%=responses[i].answers[0].date_of_create%>
+            <br />
 
             <% for(var j=0; j<responses[i].answers.length; j++) {%>
                 Pytanie: <%=responses[i].answers[j].question.question%>
