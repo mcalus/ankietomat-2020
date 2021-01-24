@@ -15,7 +15,7 @@
                 Pytanie: <%=responses[i].answers[j].question.question%>
                 <br />
                 Odpowiedź: 
-                <% if(responses[i].answers[j].question.type == '5ffae2cc0225760e3ed0da86') { %>
+                <% if(responses[i].answers[j].question.type == '5ffae2cc0225760e3ed0da86' && typeof responses[i].answers[j].answers != 'string') { %>
                     <% for(var k=0; k<responses[i].answers[j].answers.length; k++) {%>
                         <br />
                         - <%=responses[i].answers[j].answers[k]%>
