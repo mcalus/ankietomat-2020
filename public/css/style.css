@@ -113,7 +113,7 @@ p {
     font-size: 18px;
 }
 
-h1, a, form {
+h1, a, form, .jumbotron > div {
     margin-left: 25px;
 }
 

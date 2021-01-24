@@ -6,6 +6,7 @@
 
         <p><%=survey.descryption%></p>
 
+        <div>
         <% for(var i=0; i<responses.length; i++) {%>
             Odpowiadający: <%=responses[i].answers[0].responder.name%> <!--"<%=responses[i].answers[0].responder.username%>"-->
             <br />
@@ -28,6 +29,7 @@
             <% } %>
             <br />
         <% } %>
+        </div> 
     </div>
 </main>
 
