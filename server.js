@@ -32,6 +32,7 @@ app.use(flash())
 
 app.use(function(req, res, next) {
     res.locals.getMessages = _getMessages(req)
+    res.locals.flash = req.session.flash
     next()
 });
 

@@ -40,6 +40,10 @@
 
   </div>
 
-  <div class="flashMessage"><%-getMessages().flashMessage%></div>
-  
+  <%if (flash) {%>
+    <%if (flash.flashMessage) { %>
+      <div class="flashMessage"><%-getMessages().flashMessage%></div>
+    <% } %> 
+  <% } %> 
+
 </header>
