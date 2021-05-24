@@ -1,3 +1,6 @@
+html {
+    height: 100%;
+} 
 
 .mainContent {
     width: auto;
@@ -14,8 +17,8 @@
     font-variant: normal;
     text-transform: none;
 	-moz-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
--webkit-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+    -webkit-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+    box-shadow: 1px 2px 3px rgba(0,0,0,.5);
 }
 
 body {
@@ -33,6 +36,12 @@ body {
     font-style: normal;
     font-variant: normal;
     text-transform: none;
+    min-height: 100%;
+    position: relative;
+}
+
+main {
+    padding-bottom: 70px;
 }
 
 #editLogo,#usunLogo {
@@ -214,11 +223,13 @@ a:hover {
 }
 
 footer {
-	position: fixed;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   text-align: left;
+    /* position: fixed;
+    left: 0;
+    bottom: 0; */
+    width: 100%;
+    text-align: left;
+    position: absolute;
+    bottom: 0;
 }
 .ankTable ul {
   display: inline;
