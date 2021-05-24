@@ -91,6 +91,37 @@ router.post('/profile', isLoggedIn, (request, respond) => {
     })
 })
 
+router.get('/profile/delete/:userId', isLoggedIn, (request, respond) => {
+
+    User.findOne({_id: request.params.userId}).exec(async function(err, result) {
+        if (err) return handleError(err)
+        
+        if(result != null && String(result._id) == String(request.user._id)) {
+
+            await Survey.find({author: result._id}).exec(async function(err, results) {
+                await Respond.deleteMany({survey: results._id})
+                await Question.deleteMany({survey: results._id})
+            })
+            await Survey.deleteMany({author: result._id})
+
+            result.deleteOne({}, function (err) {
+                if (err) return handleError(err)
+
+                request.flash('flashMessage', 'Profil '+ result.username +' pomyślnie usunięty')
+                request.logout()
+                respond.redirect('/')
+            })
+        }
+        else {
+            request.flash('flashMessage', 'Brak takiego użytkownika!')
+            respond.redirect('/profile')
+        }
+    })
+
+    
+
+})
+
 router.get('/survey', isLoggedIn, (request, respond) => {
 
     respond.redirect('/survey/list')

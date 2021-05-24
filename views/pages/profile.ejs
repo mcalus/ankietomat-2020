@@ -4,6 +4,8 @@
     <div class="jumbotron">
         <h1>Profil</h1>
 
+        <a href="<%=siteUrl%>/profile/delete/<%=user._id%>" onClick="return confirm('Czy na pewno usunąć własny profil?')">(usuń)</a>
+
         <form action="<%=siteUrl%>/profile" method="post" >
 
             <table class="profile"> 
