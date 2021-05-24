@@ -8,7 +8,9 @@
 
         <div class="wyniki">
         <% for(var i=0; i<responses.length; i++) {%>
-            Odpowiadający: <%=responses[i].answers[0].responder.name%> <!--"<%=responses[i].answers[0].responder.username%>"-->
+            <% if(responses[i].answers[0].responder != null) { %>
+                Odpowiadający: <%=responses[i].answers[0].responder.name%> <!--"<%=responses[i].answers[0].responder.username%>"-->
+            <% } %>
             <br />
             <%=responses[i].answers[0].date_of_create%>
             <br />
