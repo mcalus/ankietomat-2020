@@ -175,7 +175,7 @@ router.get('/survey/list', isLoggedIn, (request, respond) => {
             idField: "survey"
         }, 
         function(err, popResults) {
-            respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: popResults})
+            respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: popResults, domain: request.headers.host})
         })
     })
 })

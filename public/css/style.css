@@ -166,7 +166,7 @@ p.opis {
 }
 ul.ank {
     position:relative;	
-	left: %;
+	/*left: %;*/
 }
 p.opis {
 	-moz-box-shadow: 1px 1px 1px 2px rgba(12,12,12,.4);
