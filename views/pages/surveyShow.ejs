@@ -4,16 +4,17 @@
     <div class="jumbotron">
         <h1>Ankieta "<%=survey.title%>"</h1>
 
-        <p><%=survey.descryption%></p>
-
+        <p class="opis"><%=survey.descryption%></p>
+		<br>
         <form action="<%=siteUrl%>/survey/show/<%=survey.id%>" method="post">
         <% for(var i=0; i<questions.length; i++) {%>
-            <label for="question_<%=questions[i]._id%>"><%=questions[i].question%><%=questions[i].required?'*':''%></label>
-
+            <ul class="ank">
+			<label class="pytanko" for="question_<%=questions[i]._id%>"><%=questions[i].question%><%=questions[i].required?'*':''%></label>
+			<li>
             <% if(questions[i].type == '5ffae2a70225760e3ed0da84') { %>
                 <% for(var j=0; j<questions[i].default_answers.length; j++) {%>
                     <input 
-                        id="question_<%=questions[i]._id%>_<%=j%>" 
+                        id="question_<%=questions[i]._id%>_<%=j%>"
                         type="radio" 
                         name="question_<%=questions[i]._id%>" 
                         value="<%=questions[i].default_answers[j]%>" 
@@ -41,7 +42,7 @@
                     <%=questions[i].required?'required':''%>
                 />
             <% } %>
-            <br /><br />
+			</ul><hr />
         <% } %>
 
             <input type="submit" value="Wyślij!">

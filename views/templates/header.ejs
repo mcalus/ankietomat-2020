@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ankietomat</title>
 
     <link rel="stylesheet" href="<%=siteUrl%>/css/style.css" type="text/css">
@@ -16,13 +17,13 @@
 
     <div>
 
-      <div id= title><img src="<%=siteUrl%>/img/default.png" alt="logo" id="imageLogo" /></div>
+      <div id= title><a href="/"><img src="<%=siteUrl%>/img/AnkietomatLogo.png" alt="logo" id="imageLogo" /></a></div>
 
       <div class="navigation">
 
           <ul>
 
-              <li><a href="/">Strona Główna</a></li>
+              
 
               <%if (isLogged == false) { %>
                   <li><a href="<%=siteUrl%>/login">Logowanie</a></li>

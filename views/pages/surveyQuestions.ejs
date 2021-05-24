@@ -24,10 +24,10 @@
                     <option value="<%=types[i].id%>" <%if (question != null && question.type == types[i].id) {%> selected="selected" <%}%>><%=types[i].name%></option>
                 <% } %>
             </select>
-
-            <label for="question">Pytanie: </label>
+			<br>
+            <label for="question">Treść pytania: </label>
             <input id="question" type="text" name="question" value="<%=question!=null?question.question:''%>">
-            <input type="button" value="Dodaj pytanie" onclick="dodaj_pytanie()"/>
+            <input type="button" value="Dodaj treść pytania" onclick="dodaj_pytanie()"/>
             <input type="button" value="Dodaj odpowiedz" onclick="createNewElement()"/>
             <input type="button" value="Usuń odpowiedź" onclick="deleteAnswer()" >
             <br />

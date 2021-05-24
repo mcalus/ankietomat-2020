@@ -1,12 +1,14 @@
 <%- include('../templates/header'); %>
-
+<style>
+	background-color: lightgray;
+</style>
 <main>
     <div class="jumbotron">
         <h1>Statystyki</h1>
 
         <% for(var i=0; i<surveys.length; i++) {%>
             Ankieta "<%=surveys[i].title%>" 
-            <ul>
+            <ul class="rozwijane">
                 <li>Pytania: <%=surveys[i].questions.length%></li>
                 <li>Odpowiedzi: <%=surveys[i].responses.length%></li>
             </ul>
