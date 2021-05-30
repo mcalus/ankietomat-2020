@@ -260,3 +260,7 @@ footer {
  
   display:inline;
 }
+
+.text-center {
+    text-align: center;
+}
