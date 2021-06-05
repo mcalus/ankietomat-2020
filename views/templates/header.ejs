@@ -22,9 +22,6 @@
       <div class="navigation">
 
           <ul>
-
-              
-
               <%if (isLogged == false) { %>
                   <li><a href="<%=siteUrl%>/login">Logowanie</a></li>
                   <li><a href="<%=siteUrl%>/register">Rejestracja</a></li>
@@ -32,6 +29,9 @@
                   <li><a href="<%=siteUrl%>/survey">Ankiety</a></li>
                   <li><a href="<%=siteUrl%>/survey/stats">Statystyki</a></li>
                   <li><a href="<%=siteUrl%>/profile">Profil</a></li>
+                  <%if (isAdmin == false) { %>
+                    <li><a href="<%=siteUrl%>/users">Profil</a></li>
+                  <% } %>
                   <li><a href="<%=siteUrl%>/logout">Wyloguj</a></li>
               <% } %>
           </ul>

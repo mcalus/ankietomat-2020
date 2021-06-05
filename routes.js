@@ -10,6 +10,7 @@ var Survey = require('./models/survey');
 var Question = require('./models/question');
 var Types = require('./models/types');
 var Respond = require('./models/respond');
+const user = require('./models/user');
 
 router.get('/', (request, respond) => {
 
@@ -29,7 +30,7 @@ router.post('/register', controller.register_do)
 
 router.get('/login', (request, respond, next) => {
     
-    respond.render('pages/login', {isLogged: request.isAuthenticated(), errors: request.flash('error')})
+    respond.render('pages/login', {errors: request.flash('error')})
 
 })
 
@@ -58,7 +59,7 @@ router.get('/profile', isLoggedIn, (request, respond) => {
     if(Object.keys(flash).length !== 0)
         request.flash('flashMessage', flash)
 
-    respond.render('pages/profile', {isLogged: request.isAuthenticated(), user: request.user})
+    respond.render('pages/profile', {user: request.user})
 
 })
 
@@ -130,7 +131,7 @@ router.get('/survey', isLoggedIn, (request, respond) => {
 
 router.get('/survey/new', isLoggedIn, (request, respond) => {
 
-    respond.render('pages/surveyNew', {isLogged: request.isAuthenticated(), errors: null, survey: null})
+    respond.render('pages/surveyNew', {errors: null, survey: null})
 
 })
 
@@ -165,7 +166,7 @@ router.get('/survey/edit/:surveyId', isLoggedIn, (request, respond) => {
             respond.redirect('/survey/list')
         }
 
-        respond.render('pages/surveyNew', {isLogged: request.isAuthenticated(), errors: null, survey: result})
+        respond.render('pages/surveyNew', {errors: null, survey: result})
     })
 })
 
@@ -206,7 +207,7 @@ router.get('/survey/list', isLoggedIn, (request, respond) => {
             idField: "survey"
         }, 
         function(err, popResults) {
-            respond.render('pages/surveyList', {isLogged: request.isAuthenticated(), surveys: popResults, domain: request.headers.host})
+            respond.render('pages/surveyList', {surveys: popResults, domain: request.headers.host})
         })
     })
 })
@@ -225,7 +226,7 @@ router.get('/survey/questions/:surveyId', isLoggedIn, (request, respond) => {
             if (err) throw err
 
             respond.render('pages/surveyQuestions', {
-                isLogged: request.isAuthenticated(), 
+                
                 errors: null, 
                 survey: result, 
                 types: result2, 
@@ -252,7 +253,7 @@ router.get('/survey/question/:questionId', isLoggedIn, (request, respond) => {
                 if (err) throw err
 
                 respond.render('pages/surveyQuestions', {
-                    isLogged: request.isAuthenticated(), 
+                    
                     errors: null, 
                     survey: result, 
                     types: result2, 
@@ -325,7 +326,7 @@ router.get('/survey/stats', isLoggedIn, async (request, respond) => {
         surveys[i].responses = await Respond.find({survey: surveys[i]._id}).distinct("date_of_create")
     }
 
-    respond.render('pages/stats', {isLogged: request.isAuthenticated(), surveys: surveys})
+    respond.render('pages/stats', {surveys: surveys})
 })
 
 router.get('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
@@ -341,7 +342,7 @@ router.get('/survey/show/:surveyId', isLoggedIn, (request, respond) => {
         Question.find({survey: request.params.surveyId}, function(err, result2) {
             if (err) throw err
 
-            respond.render('pages/surveyShow', {isLogged: request.isAuthenticated(), errors: null, survey: result, questions: result2})
+            respond.render('pages/surveyShow', {errors: null, survey: result, questions: result2})
         })
     })
 })
@@ -405,7 +406,7 @@ router.get('/survey/responses/:surveyId', isLoggedIn, async (request, respond) =
     }
     
     respond.render('pages/responses', {
-        isLogged: request.isAuthenticated(), 
+        
         errors: null, 
         survey: survey, 
         responses: responses, 

@@ -19,7 +19,7 @@
             <% } %>
 
             <label for="title">Tytuł: </label>
-            <input id="title" type="text" name="title" value="<%=survey!=null?survey.title:''%>">
+            <input id="title" type="text" name="title" value="<%=survey!=null?survey.title:''%>" maxlength="64" required>
             <br /><br />
             
             <label for="descryption">Opis: </label>

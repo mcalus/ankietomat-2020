@@ -11,6 +11,7 @@ var UserSchema = new Schema(
     first_name: {type: String, maxlength: 100},
     family_name: {type: String, maxlength: 100},
     date_of_join: {type: Date, default: Date.now}, 
+    email: {type: Boolean, default: false},
   }
 );
 

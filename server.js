@@ -33,6 +33,11 @@ app.use(flash())
 app.use(function(req, res, next) {
     res.locals.getMessages = _getMessages(req)
     res.locals.flash = req.session.flash
+    res.locals.isLogged = false
+    if(req.user) {
+        res.locals.isLogged = req.isAuthenticated()
+        res.locals.isAdmin = req.user.admin
+    }
     next()
 });
 
