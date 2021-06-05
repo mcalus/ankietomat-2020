@@ -1,0 +1,23 @@
+<%- include('../templates/header'); %>
+
+<main>
+    <div class="jumbotron">
+        <h1>Lista użytkowników</h1>
+		
+        <table style="width: 30%; margin: auto;">
+        <% for(var i=0; i<users.length; i++) {%>
+            
+            <tr>
+                <td><%=users[i].username%></td>
+                <td><a href="<%=siteUrl%>/profile/delete/<%=users[i].id%>" onClick="return confirm('Czy na pewno usunąć użytkownika <%=users[i].username%>?')">
+                    <img src="<%=siteUrl%>/img/usun.png" alt="Usuń użytkownika" id="usunLogo"/>
+                </a></td>
+            </tr>
+
+         <% } %>
+        </ul>
+
+    </div>
+</main>
+
+<%- include('../templates/footer'); %>

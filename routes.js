@@ -97,7 +97,7 @@ router.get('/profile/delete/:userId', isLoggedIn, (request, respond) => {
     User.findOne({_id: request.params.userId}).exec(async function(err, result) {
         if (err) return handleError(err)
         
-        if(result != null && String(result._id) == String(request.user._id)) {
+        if(result != null && (String(result._id) == String(request.user._id) || request.user.admin)) {
 
             await Survey.find({author: result._id}).exec(async function(err, results) {
                 await Respond.deleteMany({survey: results._id})
@@ -109,8 +109,14 @@ router.get('/profile/delete/:userId', isLoggedIn, (request, respond) => {
                 if (err) return handleError(err)
 
                 request.flash('flashMessage', 'Profil '+ result.username +' pomyślnie usunięty')
-                request.logout()
-                respond.redirect('/')
+
+                if(String(result._id) != String(request.user._id)) {
+                    respond.redirect('/users')
+                }
+                else {
+                    request.logout()
+                    respond.redirect('/')
+                }
             })
         }
         else {
@@ -416,6 +422,15 @@ router.get('/survey/responses/:surveyId', isLoggedIn, async (request, respond) =
 })
 
 
+router.get('/users', isLoggedAdmin, async (request, respond) => {
+
+    var users = await User.find({})
+
+    respond.render('pages/users', {users: users})
+
+})
+
+
 module.exports = router;
 
 
@@ -423,6 +438,13 @@ module.exports = router;
 
 function isLoggedIn(req, res, next){
 	if(req.isAuthenticated())
+		return next();
+
+	res.redirect('/login');
+}
+
+function isLoggedAdmin(req, res, next){
+	if(req.isAuthenticated() && req.user.admin)
 		return next();
 
 	res.redirect('/login');
