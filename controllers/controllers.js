@@ -17,9 +17,11 @@ exports.register_do = [
                 return Promise.reject('Użytkownik o takim loginie istnieje');
               }
             });
-          }),    
-    body('password').trim().isLength({ min: 1 }).escape().withMessage('Proszę podać hasło')
-        .isAlphanumeric().withMessage('Hasło nie zawiera znaków alfanumerycznych'),
+          }),
+    // body('password').trim().isLength({ min: 5,  max: 8 }).escape().withMessage('Proszę podać hasło od 5 do 8 znaków')
+        // .isAlphanumeric().withMessage('Hasło nie zawiera znaków alfanumerycznych')
+    body('password').isStrongPassword({minSymbols: 1, minNumbers: 0, minUppercase:0, minLowercase: 1, minLength: 5, pointsPerUnique:0 , pointsPerRepeat:0}).withMessage('Hasło wymaga od 5 do 8 znaków i jeden znak specjalny'),
+    body('email').trim().isEmail().escape().withMessage('Proszę podać poprawny adres e-mail'),
 
     (request, respond, next) => {
         
